@@ -1,0 +1,87 @@
+<html>
+  <head>
+    <title>
+      Exercise3 - Part2
+    </title>
+  </head>
+  <body>
+    <!--Buttons corresponding to each function below-->
+    <button type="button" onclick="actionMovies()">Action Movies</button>
+    <button type="button" onclick="tomHanks()">Tom Hanks</button>
+    <button type="button" onclick="soo2017()">2017 Movies</button>
+    <button type="button" onclick="movieCount()">Movie Count</button>
+
+    <h2>Movie Lists</h2>
+    <hr />
+    <ul class="list"></ul>
+    <script>
+      // =========================================
+      // DO NOT MODIFY This code block
+      const url =
+        "https://raw.githubusercontent.com/prust/wikipedia-movie-data/master/movies.json";
+
+      const movies = [];
+       fetch(url)
+        .then(resp => resp.json())
+        .then(data => movies.push(...data));
+      // =========================================
+
+      //Your task is to complete these four functions, according to the specifications
+      //Action Movies - Display a list of action movies that were released in 2018. Output: <movie_title> (<year>)
+      function actionMovies() {
+        movies2018 = movies.filter(movies => movies.year === 2018).map(movie => {return movie.title + "(" + movie.year+")";});
+        movies2018 = convertToHTML(movies2018);
+        document.getElementsByClassName("list")[0].innerHTML=movies2018;
+      }
+    
+      //Tom Hanks - Display a list of all comedy movies that Tom Hanks acted in. Output: <movie_title> (<year>)
+       function tomHanks() {
+         movies_tomhanks = movies.filter(movie =>(
+        (movie.genres.find( function(element){return element === "Comedy";})) 
+         && 
+         movie.cast.find(function (element){return element === "Tom Hanks";})))
+         .map(movie =>{return movie.title + "(" + movie.year+")";});
+         movies_tomhanks = convertToHTML(movies_tomhanks);
+         document.getElementsByClassName("list")[0].innerHTML=movies_tomhanks;
+       }
+     
+      //Soo 2017 - Display a list of all movies that came out in 2017 sorted alphabetically by movie title. Output: <movie_title> (<year>)
+        
+      function soo2017() {
+        movies2017 = movies
+        .filter(movie => movie.year === 2017)
+        .sort(function(a,b){
+            if(a.title > b.title)
+                {
+                    return 1;
+                }
+            else
+                return -1;
+       })
+       .map(movie =>{return movie.title + "(" + movie.year+")";});
+        movies2017 = convertToHTML(movies2017);
+        document.getElementsByClassName("list")[0].innerHTML=movies2017;
+      }
+
+      //Movie Count - Display the number of movies that were released each year. Output: <number_of_movies>
+      function movieCount() {
+        moviesperyear = movies.reduce(function(total,movies){
+          total[movies.year] = (total[movies.year] || 0) +1;
+          return total;
+          },{});
+        moviesperyear = Object.keys(moviesperyear).map((key) => [moviesperyear[key]]);
+        moviesperyear = convertToHTML(moviesperyear);
+        document.getElementsByClassName("list")[0].innerHTML=moviesperyear;
+      }
+
+      //Function that converts arrays into seperate HTML list elements. (Hint: Use this!)
+      function convertToHTML(query) {
+        const results = query.map(movie => `<li>${movie}</li>`).join("");
+        return results;
+      }
+
+      //A javascript reference to the unordered list with classname list. (Hint: Use this!)
+      const movieHTML = document.querySelector(".list");
+    </script>
+  </body>
+</html>
